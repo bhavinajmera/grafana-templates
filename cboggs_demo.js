@@ -5,6 +5,8 @@ URL args:
 service           - Currently only used for setting the title of the dashboard
 prefix            - (optional) InfluxDB series name prefix, if you use them
 hostname          - Regex for hosts you want to graph. This uses the InfluxDB query regex syntax in the WHERE clause
+                    This shell script assumes you have a series named allHosts that contains all the hostnames you might
+                    want to see
 template          - What graphs do you want to see? Template scripts should return a single function that is named 
                     the same as the template file itself, sans '.js'. Said function should return a valid array of
                     Grafana panels. This function currently needs to accept a hostname (regex), prefix, and aggregate
@@ -20,7 +22,7 @@ from              - Start of time window
 var window, document, ARGS, $, jQuery, moment, kbn;
 
 function find_hostnames(query) {
-    var search_url = window.location.protocol + '//bld-influxdb-01/db/testdb/series?u=testuser&p=testpw&q=' + query;
+    var search_url = window.location.protocol + '//influxdb:8086/db/testdb/series?u=testuser&p=testpw&q=' + query;
     var results = [];
     var request = new XMLHttpRequest();
     request.open('GET', search_url, false);
